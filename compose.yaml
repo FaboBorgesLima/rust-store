@@ -1,0 +1,27 @@
+services:
+  app: 
+    build: 
+      context: app/
+      args:
+        IS_DEV: true
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    secrets:
+      - db_password
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 10
+        window: 120s
+  db:
+    build: db/
+    env_file:
+      - .env
+    secrets:
+      - db_password
+secrets:
+  db_password:
+    file: secrets/db_password.txt

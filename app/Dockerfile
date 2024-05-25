@@ -3,9 +3,28 @@ WORKDIR /app
 COPY src /app/src
 COPY Cargo.lock /app/Cargo.lock
 COPY Cargo.toml /app/Cargo.toml
-RUN cargo build -r
+ARG IS_DEV=true
+RUN mkdir /build
+RUN apk add openssl libressl-dev musl-dev
+RUN <<EOR
+    if [ $IS_DEV ]; then 
+        echo "building with development config"
+        cargo build
+        cp /app/target/debug/app /build/app
+    else 
+        echo "building with release config"
+        cargo build -r
+        cp /app/target/release/app /build/app
+    fi
+EOR
 
 FROM alpine:3.19 
 WORKDIR /bin
-COPY --from=build /app/target/release/app /bin/app
+ENV MARIADB_DATABASE="data_base"
+ENV MARIADB_USER="user"
+ENV MARIADB_PASSWORD_FILE="/run/secrets/db_password"
+ENV MARIADB_ROOT_PASSWORD="12345678"
+ENV MARIADB_SOCKET_ADDRESS="db"
+RUN apk add openssl
+COPY --from=build /build/app /bin/app
 CMD [ "/bin/app" ]

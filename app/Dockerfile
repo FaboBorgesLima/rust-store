@@ -1,6 +1,7 @@
 FROM rust:alpine3.19 as build
 WORKDIR /app
 COPY src /app/src
+COPY Cargo.lock /app/Cargo.lock
 COPY Cargo.toml /app/Cargo.toml
 RUN cargo build -r
 

@@ -1,8 +1,12 @@
 mod store;
+mod thread_pool;
+
+use std::{
+    io::{BufRead, BufReader, Write},
+    net::{TcpListener, TcpStream},
+};
 
 use mysql::{OptsBuilder, Pool};
-use rust_decimal::Decimal;
-use store::store_product::StoreProduct;
 
 fn main() {
     let db_user_name = std::env::var("MARIADB_USER").unwrap();
@@ -14,7 +18,7 @@ fn main() {
 
     let builder = OptsBuilder::new();
 
-    let pool = Pool::new(
+    let db_pool = Pool::new(
         builder
             .db_name(Some(db_name))
             .ip_or_hostname(Some(db_address))
@@ -24,5 +28,28 @@ fn main() {
     )
     .unwrap();
 
-    let mut conn = pool.get_conn().unwrap();
+    let server_poll = thread_pool::ThreadPool::new(3);
+
+    let listener = TcpListener::bind("0.0.0.0:8080").unwrap();
+    println!("started");
+
+    for stream in listener.incoming() {
+        let stream = stream.unwrap();
+        println!("recived");
+        server_poll.execute(move || handle_connection(stream));
+    }
+}
+
+fn handle_connection(mut stream: TcpStream) {
+    let buf_reader = BufReader::new(&mut stream);
+
+    let lines: Vec<_> = buf_reader
+        .lines()
+        .map(|result| result.unwrap())
+        .take_while(|line| !line.is_empty())
+        .collect();
+    let content = lines.join("\n");
+    println!("{}", content);
+
+    stream.write(content.as_bytes()).unwrap();
 }

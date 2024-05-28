@@ -35,7 +35,6 @@ fn main() {
 
     for stream in listener.incoming() {
         let stream = stream.unwrap();
-        println!("recived");
         server_poll.execute(move || handle_connection(stream));
     }
 }
@@ -49,7 +48,6 @@ fn handle_connection(mut stream: TcpStream) {
         .take_while(|line| !line.is_empty())
         .collect();
     let content = lines.join("\n");
-    println!("{}", content);
 
     stream.write(content.as_bytes()).unwrap();
 }

@@ -24,7 +24,8 @@ ENV MARIADB_DATABASE="data_base"
 ENV MARIADB_USER="user"
 ENV MARIADB_PASSWORD_FILE="/run/secrets/db_password"
 ENV MARIADB_ROOT_PASSWORD="12345678"
-ENV MARIADB_SOCKET_ADDRESS="db"
+ENV MARIADB_ADDRESS="db"
+ENV MARIADB_PORT="3306"
 RUN apk add openssl
 COPY --from=build /build/app /bin/app
 CMD [ "/bin/app" ]

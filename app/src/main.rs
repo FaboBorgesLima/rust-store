@@ -8,6 +8,7 @@ use std::{
 };
 
 use mysql::{OptsBuilder, Pool};
+use store::store_product::StoreProduct;
 
 fn main() {
     let db_user_name = std::env::var("MARIADB_USER").unwrap();
@@ -29,19 +30,34 @@ fn main() {
     )
     .unwrap();
 
-    let server_poll = thread_pool::ThreadPool::new(3);
+    let server_poll = thread_pool::ThreadPool::new(3, &db_pool);
 
     let listener = TcpListener::bind("0.0.0.0:8080").unwrap();
     println!("started");
 
     for stream in listener.incoming() {
         let stream = stream.unwrap();
-        server_poll.execute(move || handle_connection(stream));
+        server_poll.execute(move |pool| handle_connection(stream, pool));
     }
 }
 
-fn handle_connection(mut stream: TcpStream) {
+fn handle_connection(mut stream: TcpStream, pool: Pool) {
     let request = http::request_reader::RequestReader::read(&stream);
 
-    stream.write_all(request.header.path.as_bytes()).unwrap();
+    let mut conn = pool.get_conn().unwrap();
+
+    let all = StoreProduct::all(&mut conn).unwrap();
+
+    let all = all
+        .iter()
+        .map(|prod| prod.to_json())
+        .collect::<Vec<_>>()
+        .join(",");
+
+    let mut res = String::from("{products:[");
+    res.push_str(&all);
+
+    res.push_str("]}");
+
+    stream.write_all(all.as_bytes()).unwrap();
 }

@@ -6,12 +6,14 @@ use std::{
     thread,
 };
 
+use mysql::Pool;
+
 pub struct ThreadPool {
     workers: Vec<Worker>,
     sender: Option<mpsc::Sender<Job>>,
 }
 impl ThreadPool {
-    pub fn new(size: usize) -> ThreadPool {
+    pub fn new(size: usize, pool: &Pool) -> ThreadPool {
         assert!(size > 0);
 
         let mut workers = Vec::new();
@@ -21,7 +23,7 @@ impl ThreadPool {
         let receiver = Arc::new(Mutex::new(receiver));
 
         for i in 0..size {
-            workers.push(Worker::new(i, Arc::clone(&receiver)));
+            workers.push(Worker::new(i, Arc::clone(&receiver), pool.clone()));
         }
 
         ThreadPool {
@@ -32,7 +34,7 @@ impl ThreadPool {
 
     pub fn execute<F>(&self, f: F)
     where
-        F: FnOnce() + Send + 'static,
+        F: FnOnce(Pool) + Send + 'static,
     {
         let job = Box::new(f);
 
@@ -58,12 +60,13 @@ struct Worker {
 }
 
 impl Worker {
-    fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
+    fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>, pool: Pool) -> Worker {
         let thread = thread::spawn(move || loop {
+            let pool = pool.clone();
             let message = receiver.lock().unwrap().recv();
 
             match message {
-                Ok(job) => job(),
+                Ok(job) => job(pool),
                 Err(_) => {
                     break;
                 }
@@ -76,4 +79,4 @@ impl Worker {
     }
 }
 
-type Job = Box<dyn FnOnce() + Send + 'static>;
+type Job = Box<dyn FnOnce(Pool) + Send + 'static>;

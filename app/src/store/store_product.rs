@@ -9,6 +9,17 @@ pub struct StoreProduct {
     pub product_name: String,
 }
 
+impl Clone for StoreProduct {
+    fn clone(&self) -> Self {
+        Self {
+            product_id: self.product_id.clone(),
+            price: self.price.clone(),
+            quantity: self.quantity.clone(),
+            product_name: self.product_name.clone(),
+        }
+    }
+}
+
 impl StoreProduct {
     pub fn to_json(&self) -> String {
         return format!(

@@ -42,7 +42,7 @@ fn main() {
 }
 
 fn handle_connection(mut stream: TcpStream, pool: Pool) {
-    let request = http::request_reader::RequestReader::read(&stream);
+    let request = http::request::reader::Reader::read(&stream);
 
     let mut conn = pool.get_conn().unwrap();
 

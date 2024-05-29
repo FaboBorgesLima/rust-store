@@ -3,16 +3,18 @@ use std::{
     net::TcpStream,
 };
 
-pub struct RequestReader {}
-impl RequestReader {
-    pub fn read(tcp_stream: &TcpStream) -> HttpRequest {
+use super::{header::Header, method::Method, Request};
+
+pub struct Reader {}
+impl Reader {
+    pub fn read(tcp_stream: &TcpStream) -> Request {
         let mut buf_reader = BufReader::new(tcp_stream);
         let header = Self::read_header(&mut buf_reader);
         let body = Self::read_body(&mut buf_reader, &header);
 
-        HttpRequest { header, body }
+        Request { header, body }
     }
-    fn read_header(buf_reader: &mut BufReader<&TcpStream>) -> HttpHeader {
+    fn read_header(buf_reader: &mut BufReader<&TcpStream>) -> Header {
         let mut line = String::new();
 
         let _ = buf_reader.read_line(&mut line).unwrap();
@@ -22,11 +24,11 @@ impl RequestReader {
         let method = method_path_params.nth(0).unwrap_or("GET");
 
         let method = match method {
-            "DELETE" => RequestMethod::DELETE,
-            "PATH" => RequestMethod::PATH,
-            "PUT" => RequestMethod::PUT,
-            "POST" => RequestMethod::POST,
-            _ => RequestMethod::GET,
+            "DELETE" => Method::DELETE,
+            "PATH" => Method::PATH,
+            "PUT" => Method::PUT,
+            "POST" => Method::POST,
+            _ => Method::GET,
         };
 
         let path = method_path_params.nth(0).unwrap_or("/").to_string();
@@ -55,37 +57,18 @@ impl RequestReader {
             }
         }
 
-        HttpHeader {
+        Header {
             method,
             path,
             length,
             url_params,
         }
     }
-    fn read_body(buf_reader: &mut BufReader<&TcpStream>, header: &HttpHeader) -> String {
+    fn read_body(buf_reader: &mut BufReader<&TcpStream>, header: &Header) -> String {
         let mut buf = vec![0; header.length];
 
         buf_reader.read_exact(&mut buf).unwrap();
 
         String::from_utf8(buf).unwrap()
     }
-}
-pub struct HttpRequest {
-    pub header: HttpHeader,
-    pub body: String,
-}
-
-pub struct HttpHeader {
-    pub length: usize,
-    pub path: String,
-    pub method: RequestMethod,
-    pub url_params: String,
-}
-
-pub enum RequestMethod {
-    GET,
-    POST,
-    DELETE,
-    PUT,
-    PATH,
 }

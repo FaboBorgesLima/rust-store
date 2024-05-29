@@ -1,6 +1,6 @@
 # Rust store
 
-A simple store stock management system made using docker, rust and tailwind.
+A simple store stock management system made using docker, rust, tailwind and vue.
 
 ### Requirements for local development
 
@@ -9,12 +9,21 @@ A simple store stock management system made using docker, rust and tailwind.
 
 ### Recomended configuration for local development
 
--   Cargo (Rust package manager) 1.77
+-   backend:
+    -   Cargo (Rust package manager) 1.77
+    -   Rust 1.77
+    -   vscode extensions
+-   frontend:
+    -   vscode extensions
 
-## Run tutorial
+## Run dev tutorial
 
 -   backend:
-    -   create .env using example.env as example.
+    -   create .env using .env.example as example.
     -   create a secrets/db_password.txt with the db password.
     -   start using:
         `docker compose up`
+-   frontend:
+    -   enter in frontend folder.
+    -   run:
+        `npm run dev`

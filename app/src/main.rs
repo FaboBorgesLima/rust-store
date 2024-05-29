@@ -7,6 +7,7 @@ use std::{
     net::{TcpListener, TcpStream},
 };
 
+use http::response;
 use mysql::{OptsBuilder, Pool};
 use store::store_product::StoreProduct;
 
@@ -54,10 +55,13 @@ fn handle_connection(mut stream: TcpStream, pool: Pool) {
         .collect::<Vec<_>>()
         .join(",");
 
-    let mut res = String::from("{products:[");
-    res.push_str(&all);
+    let mut body = String::from("{products:[");
+    body.push_str(&all);
 
-    res.push_str("]}");
+    body.push_str("]}");
 
-    stream.write_all(all.as_bytes()).unwrap();
+    let response =
+        response::Response::new(response::content_type::ContentType::Text, 200, request.body);
+
+    stream.write_all(response.to_string().as_bytes()).unwrap();
 }

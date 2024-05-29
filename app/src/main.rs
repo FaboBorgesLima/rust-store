@@ -1,8 +1,9 @@
+mod http;
 mod store;
 mod thread_pool;
 
 use std::{
-    io::{BufRead, BufReader, Write},
+    io::Write,
     net::{TcpListener, TcpStream},
 };
 
@@ -40,14 +41,7 @@ fn main() {
 }
 
 fn handle_connection(mut stream: TcpStream) {
-    let buf_reader = BufReader::new(&mut stream);
+    let request = http::request_reader::RequestReader::read(&stream);
 
-    let lines: Vec<_> = buf_reader
-        .lines()
-        .map(|result| result.unwrap())
-        .take_while(|line| !line.is_empty())
-        .collect();
-    let content = lines.join("\n");
-
-    stream.write(content.as_bytes()).unwrap();
+    stream.write_all(request.header.path.as_bytes()).unwrap();
 }

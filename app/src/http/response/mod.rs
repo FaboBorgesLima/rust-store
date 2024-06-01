@@ -4,11 +4,11 @@ pub mod content_type;
 pub struct Response {
     pub body: String,
     pub content_type: ContentType,
-    pub code: u8,
+    pub code: u16,
 }
 
 impl Response {
-    pub fn new(content_type: ContentType, code: u8, body: String) -> Self {
+    pub fn new(content_type: ContentType, code: u16, body: String) -> Self {
         Self {
             body,
             content_type,

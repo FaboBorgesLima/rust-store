@@ -56,11 +56,11 @@ impl StoreProduct {
             params!("product_id"=> store_prod.product_id),
         );
     }
-    pub fn insert(&self, conn: &mut PooledConn) {
-        let _ = conn.exec_drop(
+    pub fn insert(&self, conn: &mut PooledConn) -> Result<(), mysql::Error> {
+        conn.exec_drop(
             "INSERT INTO product (price,quantity,product_name) VALUES (:price, :quantity, :product_name)",
             params!("price"=>self.price,"quantity"=>self.quantity,"product_name"=>&self.product_name),
-        );
+        )
     }
 
     pub fn update(&self, conn: &mut PooledConn) {

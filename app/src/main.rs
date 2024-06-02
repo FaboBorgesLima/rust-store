@@ -7,7 +7,7 @@ use std::{
     net::{TcpListener, TcpStream},
 };
 
-use http::response::{self, content_type::ContentType};
+use http::response::{self, content_type::ContentType, Response};
 use mysql::{OptsBuilder, Pool};
 use store::{controller, store_product::StoreProduct};
 
@@ -45,21 +45,24 @@ fn main() {
 fn handle_connection(mut stream: TcpStream, pool: Pool) {
     let request = http::request::reader::Reader::read(&stream);
 
-    let not_found_response =
-        http::response::Response::new(ContentType::ApplicationJson, 404, String::new());
-    let server_error =
-        http::response::Response::new(ContentType::ApplicationJson, 500, String::new());
-
     let response = match request.header.path.as_bytes() {
+        b"/create" => {
+            let controller = store::controller::Controller::new(pool);
+
+            match controller {
+                Ok(mut controller) => controller.create(&request),
+                Err(_) => Response::server_error(),
+            }
+        }
         b"/all" => {
             let controller = store::controller::Controller::new(pool);
 
             match controller {
                 Ok(mut controller) => controller.all(),
-                Err(_) => server_error,
+                Err(_) => Response::server_error(),
             }
         }
-        _ => not_found_response,
+        _ => Response::not_found(),
     };
 
     stream.write_all(response.to_string().as_bytes()).unwrap();

@@ -24,6 +24,28 @@ impl Response {
         let length = self.get_content_length();
         format!("Content-Length: {length}")
     }
+
+    pub fn not_found() -> Self {
+        Self {
+            body: String::new(),
+            code: 404,
+            content_type: ContentType::ApplicationJson,
+        }
+    }
+    pub fn server_error() -> Self {
+        Self {
+            body: String::new(),
+            code: 500,
+            content_type: ContentType::ApplicationJson,
+        }
+    }
+    pub fn bad_request() -> Self {
+        Self {
+            body: String::new(),
+            code: 400,
+            content_type: ContentType::ApplicationJson,
+        }
+    }
 }
 
 impl ToString for Response {

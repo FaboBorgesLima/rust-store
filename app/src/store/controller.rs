@@ -1,4 +1,4 @@
-use mysql::{prelude::ToValue, Error, Pool, PooledConn};
+use mysql::{Error, Pool, PooledConn};
 use rust_decimal::Decimal;
 
 use crate::http::{request::Request, response::Response, url_params_decoder};
@@ -16,6 +16,27 @@ impl Controller {
         match conn {
             Ok(conn) => Ok(Self { conn }),
             Err(er) => Err(er),
+        }
+    }
+
+    pub fn delete(&mut self, request: &Request) -> Response {
+        let decoded = url_params_decoder::UrlParamsDecoder::decode(&request.header.url_params);
+
+        let product_id = decoded.get("product_id");
+
+        let product_id = match product_id {
+            Some(id) => id,
+            None => return Response::bad_request(),
+        };
+
+        let product_id = match product_id.parse::<i32>() {
+            Ok(id) => id,
+            Err(_) => return Response::bad_request(),
+        };
+
+        match StoreProduct::delete(&mut self.conn, product_id) {
+            Ok(_) => Response::ok(None),
+            Err(_) => Response::bad_request(),
         }
     }
 
@@ -40,11 +61,11 @@ impl Controller {
 
         body.push_str("]}");
 
-        Response {
+        Response::new(
+            crate::http::response::content_type::ContentType::ApplicationJson,
+            200,
             body,
-            content_type: crate::http::response::content_type::ContentType::ApplicationJson,
-            code: 200,
-        }
+        )
     }
 
     pub fn create(&mut self, request: &Request) -> Response {
@@ -86,11 +107,7 @@ impl Controller {
         }
 
         match result {
-            Ok(_) => Response::new(
-                crate::http::response::content_type::ContentType::ApplicationJson,
-                200,
-                "{\"result\":true}".to_string(),
-            ),
+            Ok(_) => Response::ok(None),
             Err(_) => Response::server_error(),
         }
     }

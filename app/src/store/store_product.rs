@@ -50,11 +50,11 @@ impl StoreProduct {
             },
         )
     }
-    pub fn delete(conn: &mut PooledConn, store_prod: &StoreProduct) {
-        let _ = conn.exec_drop(
+    pub fn delete(conn: &mut PooledConn, id: i32) -> Result<(), mysql::Error> {
+        conn.exec_drop(
             "DELETE FROM product WHERE product_id=:product_id",
-            params!("product_id"=> store_prod.product_id),
-        );
+            params!("product_id"=> id),
+        )
     }
     pub fn insert(&self, conn: &mut PooledConn) -> Result<(), mysql::Error> {
         conn.exec_drop(

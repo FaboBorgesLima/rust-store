@@ -7,7 +7,7 @@ use std::{
     net::{TcpListener, TcpStream},
 };
 
-use http::{request::method::Method, response::Response};
+use http::{request::method::Method, response::Response, url_params_decoder};
 use mysql::{OptsBuilder, Pool};
 
 fn main() {
@@ -53,6 +53,15 @@ fn handle_connection(mut stream: TcpStream, pool: Pool) {
                 Err(_) => Response::server_error(),
             }
         }
+        (b"/delete", Method::DELETE) => {
+            let controller = store::controller::Controller::new(pool);
+
+            match controller {
+                Ok(mut controller) => controller.delete(&request),
+                Err(_) => Response::server_error(),
+            }
+        }
+        (b"/delete", Method::OPTIONS) => Response::ok(None),
         (b"/all", Method::GET) => {
             let controller = store::controller::Controller::new(pool);
 

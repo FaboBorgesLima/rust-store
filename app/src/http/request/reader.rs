@@ -28,6 +28,7 @@ impl Reader {
             "PATH" => Method::PATH,
             "PUT" => Method::PUT,
             "POST" => Method::POST,
+            "OPTIONS" => Method::OPTIONS,
             _ => Method::GET,
         };
 

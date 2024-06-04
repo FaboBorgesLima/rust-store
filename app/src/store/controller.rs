@@ -1,4 +1,4 @@
-use mysql::{Error, Pool, PooledConn};
+use mysql::{prelude::ToValue, Error, Pool, PooledConn};
 use rust_decimal::Decimal;
 
 use crate::http::{request::Request, response::Response, url_params_decoder};
@@ -77,6 +77,13 @@ impl Controller {
         let product = StoreProduct::new(price, quantity, product_name.to_string());
 
         let result = product.insert(&mut self.conn);
+
+        if price.is_zero() || price.is_sign_negative() {
+            return Response::bad_request();
+        };
+        if product_name.clone().chars().count() < 3 {
+            return Response::bad_request();
+        }
 
         match result {
             Ok(_) => Response::new(

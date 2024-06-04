@@ -1,11 +1,7 @@
 use mysql::{Error, Pool, PooledConn};
 use rust_decimal::Decimal;
 
-use crate::http::{
-    request::{self, Request},
-    response::Response,
-    url_params_decoder,
-};
+use crate::http::{request::Request, response::Response, url_params_decoder};
 
 use super::store_product::StoreProduct;
 

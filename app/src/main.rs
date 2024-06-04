@@ -7,9 +7,8 @@ use std::{
     net::{TcpListener, TcpStream},
 };
 
-use http::response::{self, content_type::ContentType, Response};
+use http::{request::method::Method, response::Response};
 use mysql::{OptsBuilder, Pool};
-use store::{controller, store_product::StoreProduct};
 
 fn main() {
     let db_user_name = std::env::var("MARIADB_USER").unwrap();
@@ -45,8 +44,8 @@ fn main() {
 fn handle_connection(mut stream: TcpStream, pool: Pool) {
     let request = http::request::reader::Reader::read(&stream);
 
-    let response = match request.header.path.as_bytes() {
-        b"/create" => {
+    let response = match (request.header.path.as_bytes(), &request.header.method) {
+        (b"/create", Method::POST) => {
             let controller = store::controller::Controller::new(pool);
 
             match controller {
@@ -54,7 +53,7 @@ fn handle_connection(mut stream: TcpStream, pool: Pool) {
                 Err(_) => Response::server_error(),
             }
         }
-        b"/all" => {
+        (b"/all", Method::GET) => {
             let controller = store::controller::Controller::new(pool);
 
             match controller {

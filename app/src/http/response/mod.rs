@@ -51,7 +51,7 @@ impl Response {
 impl ToString for Response {
     fn to_string(&self) -> String {
         format!(
-            "HTTP/1.1 {code}\r\n{content_type}\r\n{content_size}\r\n\r\n{body}",
+            "HTTP/1.1 {code}\r\n{content_type}\r\n{content_size}\r\nAccess-Control-Allow-Origin: *\r\n\r\n{body}",
             code = self.code,
             content_type = self.content_type.to_string(),
             content_size = self.get_content_length_as_string(),

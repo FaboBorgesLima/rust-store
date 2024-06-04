@@ -37,7 +37,10 @@ impl Controller {
 
         for product in products {
             body.push_str(&product);
+            body.push_str(",");
         }
+
+        body.pop();
 
         body.push_str("]}");
 

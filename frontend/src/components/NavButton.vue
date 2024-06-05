@@ -7,11 +7,9 @@ defineProps<{ to: RouteLocationRaw }>()
 <template>
     <RouterLink :to=to>
         <CustomButton>
-            <span class="text-orange-500 dark:text-orange-50 block text-lg font-bold text-center">
+            <span class="text-primary block text-lg font-bold text-center">
                 <slot></slot>
             </span>
         </CustomButton>
-
-
     </RouterLink>
 </template>

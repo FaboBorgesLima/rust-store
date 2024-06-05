@@ -5,7 +5,7 @@ import CommonLayout from './layouts/CommonLayout.vue';
 
 <template>
     <CommonLayout>
-        <RouterView></RouterView>
+        <router-view />
     </CommonLayout>
 
 </template>

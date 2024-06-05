@@ -5,6 +5,14 @@
         @apply dark:text-slate-50 text-slate-950;
     }
 }
+@layer components {
+    .bg-primary {
+        @apply dark:bg-orange-700 bg-orange-500;
+    }
+    .text-primary {
+        @apply text-orange-500 dark:text-orange-50;
+    }
+}
 
 @tailwind components;
 @tailwind utilities;

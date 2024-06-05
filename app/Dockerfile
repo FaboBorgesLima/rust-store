@@ -18,7 +18,7 @@ RUN <<EOR
     fi
 EOR
 
-FROM alpine:3.19 
+FROM scratch
 WORKDIR /bin
 ENV MARIADB_DATABASE="data_base"
 ENV MARIADB_USER="user"

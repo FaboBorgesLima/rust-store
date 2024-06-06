@@ -7,5 +7,4 @@ import CommonLayout from './layouts/CommonLayout.vue';
     <CommonLayout>
         <router-view />
     </CommonLayout>
-
 </template>

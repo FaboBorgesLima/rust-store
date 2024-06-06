@@ -1,7 +1,5 @@
 use content_type::ContentType;
 
-use super::request::method::Method;
-
 pub mod content_type;
 pub struct Response {
     pub body: String,

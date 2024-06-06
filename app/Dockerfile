@@ -26,5 +26,6 @@ ENV MARIADB_PASSWORD_FILE="/run/secrets/db_password"
 ENV MARIADB_ROOT_PASSWORD="12345678"
 ENV MARIADB_ADDRESS="db"
 ENV MARIADB_PORT="3306"
+EXPOSE 8080
 COPY --from=build /build/app /bin/app
 CMD [ "/bin/app" ]

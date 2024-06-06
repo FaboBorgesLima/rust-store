@@ -5,7 +5,7 @@ use rust_decimal::Decimal;
 
 use crate::http::{request::Request, response::Response, url_params_decoder};
 
-use super::store_product::{self, StoreProduct};
+use super::store_product::StoreProduct;
 
 pub struct Controller {
     conn: PooledConn,

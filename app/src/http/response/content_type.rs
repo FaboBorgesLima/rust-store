@@ -3,6 +3,12 @@ pub enum ContentType {
     Text,
 }
 
+impl Default for ContentType {
+    fn default() -> Self {
+        Self::Text
+    }
+}
+
 impl ToString for ContentType {
     fn to_string(&self) -> String {
         match self {

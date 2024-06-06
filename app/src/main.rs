@@ -7,7 +7,7 @@ use std::{
     net::{TcpListener, TcpStream},
 };
 
-use http::{request::method::Method, response::Response, url_params_decoder};
+use http::{request::method::Method, response::Response};
 use mysql::{OptsBuilder, Pool};
 
 fn main() {

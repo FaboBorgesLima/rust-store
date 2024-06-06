@@ -61,7 +61,15 @@ fn handle_connection(mut stream: TcpStream, pool: Pool) {
                 Err(_) => Response::server_error(),
             }
         }
-        (b"/delete", Method::OPTIONS) => Response::ok(None),
+        (b"/update", Method::PUT) => {
+            let controller = store::controller::Controller::new(pool);
+
+            match controller {
+                Ok(mut controller) => controller.update(&request),
+                Err(_) => Response::server_error(),
+            }
+        }
+        (b"/delete" | b"/update", Method::OPTIONS) => Response::ok(None),
         (b"/all", Method::GET) => {
             let controller = store::controller::Controller::new(pool);
 

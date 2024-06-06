@@ -1,39 +1,29 @@
 <script setup lang="ts">
 import SectionContainer from './SectionContainer.vue';
-import { instance } from '../connection/axios';
-import { reactive } from 'vue';
-defineProps<{ productName: string, price: number, quantity: number, id: number }>();
+import { ref } from 'vue';
+import StoreProductShow from '../components/StoreProductShow.vue'
+import StoreProductUpdate from '../components/StoreProductUpdate.vue'
+const props = defineProps<{ productName: string, price: number, quantity: number, id: number }>();
 
-const sectionClasses = reactive({ hidden: false });
+const isDeleted = ref(false);
 
-function deleteProduct(id: number) {
-    instance.delete(`/delete?product_id=${id}`).then(() => {
-        sectionClasses.hidden = true;
-    });
+const productName = ref(props.productName);
+const price = ref(props.price);
+const quantity = ref(props.quantity);
+const isEditMode = ref(false);
 
-}
+
+
 
 </script>
 <template>
-    <SectionContainer :class="sectionClasses">
+    <SectionContainer v-if="!isDeleted">
         <header class="w-full bg-primary text-white p-2 font-bold">
             <h1 class=" text-center font-bold text-lg">{{ productName }}</h1>
         </header>
-        <div class="grid grid-cols-7">
-            <ul class="p-2 col-span-6">
-                <li><strong>id:</strong> {{ id }}</li>
-                <li><strong>price:</strong> {{ price }}</li>
-                <li><strong>quantity:</strong> {{ quantity }}</li>
-            </ul>
-            <div class="p-2 flex items-end flex-col">
-                <button @click="deleteProduct(id)" class="flex flex-row justify-end group">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="size-6 group-hover:text-red-500 transition-all">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                    </svg>
-                </button>
-            </div>
-        </div>
+        <StoreProductUpdate v-model:isEditMode="isEditMode" v-model:productName="productName" v-model:price="price"
+            v-model:quantity="quantity" :id="id" v-if="isEditMode" class="col-span-6"></StoreProductUpdate>
+        <StoreProductShow v-model:isDeleted="isDeleted" v-model:isEditMode="isEditMode" :productName="productName"
+            :price="price" :quantity="quantity" :id="id" v-else class="col-span-6"></StoreProductShow>
     </SectionContainer>
 </template>

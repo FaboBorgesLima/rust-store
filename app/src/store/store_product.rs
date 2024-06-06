@@ -1,4 +1,4 @@
-use mysql::{params, prelude::Queryable, Conn, Error, PooledConn};
+use mysql::{params, prelude::Queryable, Error, PooledConn};
 use rust_decimal::Decimal;
 
 #[derive(PartialEq, Eq)]
@@ -63,10 +63,10 @@ impl StoreProduct {
         )
     }
 
-    pub fn update(&self, conn: &mut PooledConn) {
-        let _ = conn.exec_drop(
+    pub fn update(&self, conn: &mut PooledConn) -> Result<(), mysql::Error> {
+        conn.exec_drop(
             "UPDATE product SET price = :price,quantity = :quantity ,product_name = :product_name WHERE product_id = :product_id",
-            params!(":product_id"=>self.product_id,"price"=>self.price,"quantity"=>self.quantity,"product_name"=>&self.product_name),
-        );
+            params!("product_id"=>self.product_id,"price"=>self.price,"quantity"=>self.quantity,"product_name"=>&self.product_name),
+        )
     }
 }

@@ -34,17 +34,15 @@ function onSubmit() {
         </header>
         <div class="p-2 flex flex-col gap-2">
             <label class="flex flex-col gap-2">
-                Product Name <input v-model="productName" placeholder="product name"
-                    class="dark:bg-orange-500/20 rounded-sm p-2">
+                Product Name <input v-model="productName" placeholder="product name" class="common-input p-2">
             </label>
 
             <label class="flex flex-col gap-2">
-                Price <input v-model="price" placeholder="price" class="dark:bg-orange-500/20 rounded-sm p-2"
-                    type="number" step="0.01">
+                Price <input v-model="price" placeholder="price" class="common-input p-2" type="number" step="0.01">
             </label>
             <label class="flex flex-col gap-2">
-                Quantity <input v-model="quantity" placeholder="quantity" class="dark:bg-orange-500/20 rounded-sm p-2"
-                    type="number" step="1">
+                Quantity <input v-model="quantity" placeholder="quantity" class="common-input p-2" type="number"
+                    step="1">
             </label>
         </div>
         <div class="bg-primary flex flex-row justify-center p-2">

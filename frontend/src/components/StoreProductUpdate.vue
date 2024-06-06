@@ -35,24 +35,27 @@ function updateProduct(product: ProductSchemaInDbI) {
     <form @submit.prevent="updateProduct(product)" class="flex flex-col gap-2 p-2">
         <label class="w-full flex flex-row gap-1">
             <span class="font-bold uppercase text-sm">product name:</span>
-            <input class="flex-grow bg-orange-500/50 rounded-sm" v-model="product.product_name">
+            <input class="flex-grow common-input px-1" v-model="product.product_name">
         </label>
-        <label class="w-full flex flex-row gap-1">
+        <label class="w-full flex flex-row gap-1 px-1">
             <span class="font-bold uppercase text-sm">price:</span>
-            <input class="flex-grow bg-orange-500/50 rounded-sm" v-model="product.price" type="number" step="0.01">
+            <input class="flex-grow common-input px-1" v-model="product.price" type="number" step="0.01">
         </label>
         <label class="w-full flex flex-row gap-1">
             <span class="font-bold uppercase text-sm">quantity:</span>
-            <input class="flex-grow bg-orange-500/50 rounded-sm" v-model="product.quantity" type="number">
+            <input class="flex-grow common-input px-1" v-model="product.quantity" type="number">
         </label>
-        <div class="flex flex-row justify-evenly">
-            <button type="submit" class="group">
+        <div class="grid grid-cols-2 gap-2 rounded-sm">
+            <button type="submit"
+                class="group w-full flex flex-row justify-center hover:bg-green-500/10 transition-all duration-300">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="size-6 group-hover:text-green-500 transition-all">
                     <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
                 </svg>
             </button>
-            <button type="button" class="group" @click="isEditMode = !isEditMode">
+            <button type="button"
+                class="group w-full flex flex-row justify-center hover:bg-red-500/10 transition-all duration-300"
+                @click="isEditMode = !isEditMode">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="size-6 group-hover:text-red-500 transition-all">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />

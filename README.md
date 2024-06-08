@@ -27,3 +27,14 @@ A simple store stock management system made using docker, rust, tailwind and vue
     -   enter in frontend folder.
     -   run:
         `npm run dev`
+
+# Deployment requirements
+
+-   Docker engine 26.1
+
+## Run deployment tutorial
+
+run:
+`docker compose -f docker-compose.deploy.yaml up --build`
+
+the frontend will run at port 80 and communicates to the backend through the "http://rust-store:8080" url, so you will need a DNS pointing to this address.

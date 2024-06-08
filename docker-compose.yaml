@@ -1,6 +1,6 @@
 services:
-  app: 
-    build: 
+  app:
+    build:
       context: app/
       args:
         IS_DEV: true

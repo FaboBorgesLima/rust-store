@@ -12,8 +12,7 @@ use mysql::{OptsBuilder, Pool};
 
 fn main() {
     let db_user_name = std::env::var("MARIADB_USER").unwrap();
-    let db_user_password =
-        std::fs::read_to_string(std::env::var("MARIADB_PASSWORD_FILE").unwrap()).unwrap();
+    let db_user_password = std::env::var("MARIADB_PASSWORD").unwrap();
     let db_name = std::env::var("MARIADB_DATABASE").unwrap();
     let db_address = std::env::var("MARIADB_ADDRESS").unwrap();
     let db_port: u16 = std::env::var("MARIADB_PORT").unwrap().parse().unwrap();

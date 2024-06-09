@@ -20,7 +20,7 @@ A simple store stock management system made using docker, rust, tailwind and vue
 
 -   backend:
     -   create .env using .env.example as example.
-    -   create a secrets/db_password.txt with the db password.
+    -   create a secrets/db_root_password.txt with the root password.
     -   start using:
         `docker compose up`
 -   frontend:
@@ -36,7 +36,7 @@ A simple store stock management system made using docker, rust, tailwind and vue
 
 create a .env file using [.env.example](./.env.example)
 
-creeate a secrets dir with "db_password.txt" and "db_root_password.txt"
+creeate a secrets dir with "db_root_password.txt"
 
 run:
 `docker compose -f docker-compose.deploy.yaml up --build`

@@ -8,8 +8,6 @@ services:
             - "8080:8080"
         env_file:
             - .env
-        secrets:
-            - db_password
         deploy:
             restart_policy:
                 condition: on-failure
@@ -21,7 +19,6 @@ services:
         env_file:
             - .env
         secrets:
-            - db_password
             - db_root_password
     frontend:
         build: frontend/
@@ -29,7 +26,5 @@ services:
             - "80:80"
 
 secrets:
-    db_password:
-        file: secrets/db_password.txt
     db_root_password:
         file: secrets/db_root_password.txt

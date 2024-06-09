@@ -54,12 +54,16 @@ impl Controller {
 
         let mut body = String::from("{\"products\":[");
 
+        let products_len = products.len();
+
         for product in products {
             body.push_str(&product);
             body.push_str(",");
         }
 
-        body.pop();
+        if products_len > 0 {
+            body.pop();
+        }
 
         body.push_str("]}");
 

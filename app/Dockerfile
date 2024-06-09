@@ -3,20 +3,11 @@ WORKDIR /app
 COPY src /app/src
 COPY Cargo.lock /app/Cargo.lock
 COPY Cargo.toml /app/Cargo.toml
-ARG IS_DEV=true
+COPY build.sh /app/build.sh
+ARG IS_DEV
 RUN mkdir /build
 RUN apk add openssl libressl-dev musl-dev
-RUN <<EOR
-    if [ $IS_DEV ]; then 
-        echo "building with development config"
-        cargo build
-        cp /app/target/debug/app /build/app
-    else 
-        echo "building with release config"
-        cargo build -r
-        cp /app/target/release/app /build/app
-    fi
-EOR
+RUN sh build.sh
 
 FROM scratch
 WORKDIR /bin

@@ -2,11 +2,12 @@
 FROM node:20-alpine3.20 as builder
 
 WORKDIR /frontend
+ARG IS_DEV
 COPY . .
 RUN npm install
-RUN npm run build
+RUN sh build.sh
 
-FROM httpd:2.4
-COPY --from=builder /frontend/dist/ /usr/local/apache2/htdocs/
+
+FROM nginx:1.27-alpine
+COPY --from=builder /frontend/dist/ /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/nginx.conf
-RUN ls /usr/local/apache2/htdocs

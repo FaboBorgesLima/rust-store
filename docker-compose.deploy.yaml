@@ -21,7 +21,7 @@ services:
         secrets:
             - db_root_password
         volumes:
-            - data: /var/lib/mysql
+            - data:/var/lib/mysql
     frontend:
         build: frontend/
         ports:
@@ -32,3 +32,4 @@ secrets:
         file: secrets/db_root_password.txt
 volumes:
     data:
+        external: false

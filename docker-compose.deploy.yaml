@@ -20,6 +20,8 @@ services:
             - .env
         secrets:
             - db_root_password
+        volumes:
+            - data: /var/lib/mysql
     frontend:
         build: frontend/
         ports:
@@ -28,3 +30,5 @@ services:
 secrets:
     db_root_password:
         file: secrets/db_root_password.txt
+volumes:
+    data:

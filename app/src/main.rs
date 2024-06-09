@@ -43,6 +43,12 @@ fn main() {
 fn handle_connection(mut stream: TcpStream, pool: Pool) {
     let request = http::request::reader::Reader::read(&stream);
 
+    println!(
+        "{method:?} {path}",
+        method = request.header.method,
+        path = request.header.path
+    );
+
     let response = match (request.header.path.as_bytes(), &request.header.method) {
         (b"/create", Method::POST) => {
             let controller = store::controller::Controller::new(pool);

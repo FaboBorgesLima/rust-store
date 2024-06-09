@@ -23,7 +23,7 @@ onMounted(async () => {
 
 <template>
     <div class="container mx-auto m-2 px-2 sm:px-0 grid grid-cols-1 lg:grid-cols-2 gap-2">
-        <SectionContainer class="col-span-2 p-2" v-if="!products">
+        <SectionContainer class="col-span-2 p-2" v-if="!products.length">
             <h1 class="text-xl underline">Products not found</h1>
             <p>Add some products so you can view them here</p>
         </SectionContainer>

@@ -1,6 +1,6 @@
 ## Deployment tutorial
 
-create a .env file using [.env.example](./.env.example)
+create a .env file using [.env.example](../.env.example)
 
 creeate a secrets dir with "db_root_password.txt"
 

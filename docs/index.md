@@ -24,13 +24,13 @@ A simple store stock management system made using docker, rust, tailwind and vue
 - and for rebuild after every modification:
   `docker compose watch`
 
-now, go on and start coding!
+now, go ahead and start coding!
 
 ## Deployment tutorial
 
 create a .env file using [.env.example](../.env.example)
 
-creeate a secrets dir with "db_root_password.txt"
+create a secrets dir with "db_root_password.txt"
 
 run:
 `docker compose -f docker-compose.deploy.yaml up --build`

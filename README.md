@@ -20,9 +20,8 @@ A simple store stock management system made using docker, rust, tailwind and vue
 - create .env using .env.example as example.
 - create a secrets/db_root_password.txt with the root password.
 - start containers with:
-  `docker compose up`
-- and for rebuild after every modification:
-  `docker compose watch`
+  `docker compose up --watch`
+- now access the [frontend](http://127.0.0.1)
 
 now, go ahead and start coding!
 

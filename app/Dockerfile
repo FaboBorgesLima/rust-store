@@ -1,4 +1,4 @@
-FROM rust:alpine3.19 as build
+FROM rust:alpine3.19 AS build
 WORKDIR /app
 COPY src /app/src
 COPY Cargo.lock /app/Cargo.lock

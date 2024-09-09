@@ -1,5 +1,5 @@
 # this dockerfile is made for using in deployment, in development is better to use node installed localy
-FROM node:20-alpine3.20 as builder
+FROM node:20-alpine3.20 AS builder
 
 WORKDIR /frontend
 ARG IS_DEV
